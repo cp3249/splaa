@@ -50,7 +50,7 @@ async def generateResponse(model, assistant_name, user_name, speaker_file, syste
     while True:
         user_text = whisperTranscription(recordAudio())
         if assistant_name.lower() in user_text.lower():
-            history.append({'role': 'user', 'content': user_text})
+            history.append({'role': 'user', 'content': f'/no_think {user_text}'})
             response = chat(model, messages=history, tools=helperFunctions.tools)
             if response['message'].get('tool_calls'):
                 for tool in response['message']['tool_calls']:

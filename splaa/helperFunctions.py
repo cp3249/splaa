@@ -90,15 +90,16 @@ async def getStockPrice(ticker):
     
 
 
-blacklisted_commands = ["rm", "mkfs", "dd", "shutdown", "reboot", "sudo", "su"]
-
 async def executeCommand(command):
+    blacklisted_commands = ["rm", "mkfs", "dd", "shutdown", "reboot", "sudo", "su"]
+
     for blacklisted_command in blacklisted_commands:
         if blacklisted_command in command:
             return json.dumps(f"Error: Command '{command}' is blacklisted")
 
     try:
-        output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode("utf-8")
+        powershell_command = ["powershell", "-Command", command]
+        output = subprocess.check_output(powershell_command, stderr=subprocess.STDOUT).decode("utf-8")
         if output.strip() == "":
             return json.dumps(f"Command '{command}' executed successfully")
         return json.dumps(f"Command output: {output}")
